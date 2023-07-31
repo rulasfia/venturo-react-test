@@ -4,11 +4,19 @@ import { ButtonHTMLAttributes, forwardRef } from "react";
 type ComponentProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: "primary" | "outline";
 	size?: "md" | "sm";
+	isLoading?: boolean;
 };
 
 const Button = forwardRef<HTMLButtonElement, ComponentProps>(
 	(
-		{ variant = "primary", size = "md", className, children, ...props },
+		{
+			variant = "primary",
+			size = "md",
+			className,
+			children,
+			isLoading,
+			...props
+		},
 		ref
 	) => {
 		return (
@@ -16,8 +24,9 @@ const Button = forwardRef<HTMLButtonElement, ComponentProps>(
 				<button
 					{...props}
 					ref={ref}
+					disabled={isLoading ? true : false}
 					className={cn(
-						"font-medium relative rounded-md inline-flex items-center justify-center ",
+						"font-medium relative rounded-md inline-flex items-center justify-center disabled:pointer-events-none disabled:opacity-50",
 						variant === "primary" &&
 							"bg-primary border-primary text-primary-foreground hover:bg-primary/90",
 						variant === "outline" &&
@@ -27,7 +36,7 @@ const Button = forwardRef<HTMLButtonElement, ComponentProps>(
 						className
 					)}
 				>
-					{children}
+					{isLoading ? "Loading..." : children}
 				</button>
 			</>
 		);

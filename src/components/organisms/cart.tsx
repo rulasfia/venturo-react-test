@@ -1,6 +1,5 @@
 import {
 	Sheet,
-	SheetClose,
 	SheetContent,
 	SheetFooter,
 	SheetHeader,
@@ -13,6 +12,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "~/lib/store/store";
 import CartMenu from "../molecules/cartMenu";
 import { formatCurrency } from "~/lib/utils/currencyFormatter";
+import { useCreateOrderMutation } from "~/lib/resources/order/orderApi";
 
 export default function Cart() {
 	const cart = useSelector((state: RootState) => state.order.cart);
@@ -21,7 +21,24 @@ export default function Cart() {
 		return acc + order.total * order.item.harga;
 	}, 0);
 
-	console.log({ cart });
+	const [createOrder, { isLoading }] = useCreateOrderMutation({});
+
+	const createOrderHandler = async () => {
+		const items = cart.map((item) => ({
+			id: item.item.id,
+			harga: item.item.harga,
+			catatan: item.note,
+		}));
+
+		const res = await createOrder({
+			items,
+			nominal_pesanan: totalOrder,
+			nominal_diskon: 0,
+		});
+
+		console.log({ res });
+	};
+
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
@@ -55,9 +72,10 @@ export default function Cart() {
 								<span>Total:</span>
 								<span>{formatCurrency(totalOrder)}</span>
 							</div>
-							<SheetClose asChild>
-								<Button>Buat Pesanan</Button>
-							</SheetClose>
+
+							<Button onClick={createOrderHandler} isLoading={isLoading}>
+								Buat Pesanan
+							</Button>
 						</div>
 					</SheetFooter>
 				</div>
