@@ -1,15 +1,14 @@
-import { useGetAllMenuQuery } from "./lib/resources/menu/menuApi";
+import Navbar from "./components/navbar";
+import Menus from "./components/organisms/menus";
 
 function App() {
-	const { data, isLoading } = useGetAllMenuQuery(undefined);
-
-	console.log({ isLoading, data });
-
 	return (
-		<div className="container mx-auto">
-			<h1>Hello world!</h1>
-			<pre>{JSON.stringify(data, null, 2)}</pre>
-		</div>
+		<>
+			<Navbar />
+			<main className="container mx-auto py-8 px-4">
+				<Menus />
+			</main>
+		</>
 	);
 }
 

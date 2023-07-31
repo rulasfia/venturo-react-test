@@ -15,6 +15,6 @@ export const orderSlice = createSlice({
 	reducers: {},
 });
 
-// export const { increment, decrement, incrementByAmount } = orderSlice.actions;
+// export const { increment, decrement, incrementByAmount } = mainSlice.actions;
 
 export default orderSlice.reducer;
