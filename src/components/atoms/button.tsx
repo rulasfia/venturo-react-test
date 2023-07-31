@@ -1,28 +1,35 @@
 import { cn } from "mxcn";
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 
 type ComponentProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: "primary" | "outline";
+	size?: "md" | "sm";
 };
 
-export default function Button({
-	children,
-	variant = "primary",
-	className,
-	...props
-}: ComponentProps) {
-	return (
-		<button
-			{...props}
-			className={cn(
-				"py-2 px-4 border-2 font-medium rounded-md inline-flex items-center justify-center gap-x-2",
-				variant === "primary" &&
-					"bg-primary border-primary text-primary-foreground hover:bg-primary/90",
-				variant === "outline" && "bg-transparent border-primary",
-				className
-			)}
-		>
-			{children}
-		</button>
-	);
-}
+const Button = forwardRef<HTMLButtonElement, ComponentProps>(
+	(
+		{ variant = "primary", size = "md", className, children, ...props },
+		ref
+	) => {
+		return (
+			<button
+				{...props}
+				ref={ref}
+				className={cn(
+					"font-medium rounded-md inline-flex items-center justify-center ",
+					variant === "primary" &&
+						"bg-primary border-primary text-primary-foreground hover:bg-primary/90",
+					variant === "outline" &&
+						"bg-transparent border-primary hover:bg-black/10",
+					size === "md" && "py-2 px-4 border-2 gap-x-2",
+					size === "sm" && "py-1 px-2 border-2 gap-x-1",
+					className
+				)}
+			>
+				{children}
+			</button>
+		);
+	}
+);
+
+export default Button;
