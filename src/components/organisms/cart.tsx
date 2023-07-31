@@ -25,12 +25,17 @@ export default function Cart() {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button variant="outline">
-					<>
+				<div role="button" className="relative inline-block">
+					<Button variant="outline">
 						<ShoppingCartIcon className="h-4 w-4" />
 						Keranjang
-					</>
-				</Button>
+					</Button>
+					{cart.length < 1 ? null : (
+						<span className="bg-red-600 text-white absolute px-2 py-1 text-xs font-medium top-0 right-0 rounded-full transform translate-x-1/2 -translate-y-1/2 ">
+							{cart.length}
+						</span>
+					)}
+				</div>
 			</SheetTrigger>
 			<SheetContent className="w-full sm:w-[540px] sm:max-w-md">
 				<div className="flex h-full flex-col justify-between">
