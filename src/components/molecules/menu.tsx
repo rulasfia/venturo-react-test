@@ -21,7 +21,10 @@ export default function Menu({ data }: ComponentProps) {
 				width={360}
 				height={240}
 			/>
-			<p className="text-lg font-medium mt-4">{data.nama}</p>
+			<p className="text-xs text-primary mt-4 px-3 capitalize py-1 w-fit rounded-full bg-primary/10">
+				{data.tipe}
+			</p>
+			<p className="text-lg font-medium mt-1">{data.nama}</p>
 			<p className="text-base font-bold text-primary">
 				{formatCurrency(data.harga)}
 			</p>

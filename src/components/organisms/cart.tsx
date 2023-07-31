@@ -13,13 +13,18 @@ import { RootState } from "~/lib/store/store";
 import CartMenu from "../molecules/cartMenu";
 import { formatCurrency } from "~/lib/utils/currencyFormatter";
 import { useCreateOrderMutation } from "~/lib/resources/order/orderApi";
+import VoucherInput from "../molecules/voucherInput";
 
 export default function Cart() {
-	const cart = useSelector((state: RootState) => state.order.cart);
+	const { cart, discount, voucherID } = useSelector(
+		(state: RootState) => state.order
+	);
 
-	const totalOrder = cart.reduce((acc, order) => {
+	const total = cart.reduce((acc, order) => {
 		return acc + order.total * order.item.harga;
 	}, 0);
+
+	const totalWithDiscount = discount > total ? 0 : total - discount;
 
 	const [createOrder, { isLoading }] = useCreateOrderMutation({});
 
@@ -32,8 +37,9 @@ export default function Cart() {
 
 		const res = await createOrder({
 			items,
-			nominal_pesanan: totalOrder,
-			nominal_diskon: 0,
+			nominal_pesanan: totalWithDiscount,
+			nominal_diskon: discount,
+			voucher_id: voucherID,
 		});
 
 		console.log({ res });
@@ -54,9 +60,9 @@ export default function Cart() {
 					)}
 				</div>
 			</SheetTrigger>
-			<SheetContent className="w-full sm:w-[540px] sm:max-w-md">
+			<SheetContent className="w-full sm:w-[580px] sm:max-w-md">
 				<div className="flex h-full flex-col justify-between">
-					<div className="flex flex-col">
+					<div className="flex h-full px-1 overflow-y-scroll flex-col">
 						<SheetHeader>
 							<SheetTitle>Keranjang</SheetTitle>
 						</SheetHeader>
@@ -66,11 +72,20 @@ export default function Cart() {
 							))}
 						</div>
 					</div>
+
 					<SheetFooter>
 						<div className="flex flex-col gap-y-4 w-full">
+							<VoucherInput />
 							<div className="flex flex-row justify-between font-medium px-4 py-2 bg-white border border-gray-200 rounded-md">
 								<span>Total:</span>
-								<span>{formatCurrency(totalOrder)}</span>
+								<div className="flex flex-row gap-x-2">
+									{discount !== 0 && (
+										<span className="line-through text-foreground/50">
+											{formatCurrency(total)}
+										</span>
+									)}
+									<span>{formatCurrency(totalWithDiscount)}</span>
+								</div>
 							</div>
 
 							<Button onClick={createOrderHandler} isLoading={isLoading}>

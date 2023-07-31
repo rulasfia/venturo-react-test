@@ -7,6 +7,7 @@ export interface OrderBody {
 	nominal_diskon: number;
 	nominal_pesanan: number;
 	items: Item[];
+	voucher_id?: number | null;
 }
 
 interface Item {

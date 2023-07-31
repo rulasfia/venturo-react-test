@@ -5,7 +5,7 @@ const formatter = new Intl.NumberFormat("id-Id", {
 });
 
 export const formatCurrency = (price: number) => {
-	if (price === 0) return "Rp -";
+	if (price === 0) return "Rp 0";
 
 	return formatter.format(price);
 };

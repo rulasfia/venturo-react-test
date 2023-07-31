@@ -4,10 +4,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface OrderState {
 	cart: Array<{ item: Menu; total: number; note: string }>;
+	discount: number;
+	voucherID: number | null;
 }
 
 const initialState: OrderState = {
 	cart: [],
+	discount: 0,
+	voucherID: null,
 };
 
 export const orderSlice = createSlice({
@@ -60,10 +64,22 @@ export const orderSlice = createSlice({
 				state.cart[idx].note = action.payload.note;
 			}
 		},
+		updateDiscount: (
+			state,
+			action: PayloadAction<{ id: number; value: number }>
+		) => {
+			state.discount = action.payload.value;
+
+			if (action.payload.value > 0) {
+				state.voucherID = action.payload.id;
+			} else {
+				state.voucherID = null;
+			}
+		},
 	},
 });
 
-export const { addToCart, removeFromCart, updateNoteByMenuID } =
+export const { addToCart, removeFromCart, updateNoteByMenuID, updateDiscount } =
 	orderSlice.actions;
 
 export default orderSlice.reducer;
