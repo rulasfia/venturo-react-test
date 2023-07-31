@@ -17,6 +17,10 @@ import { formatCurrency } from "~/lib/utils/currencyFormatter";
 export default function Cart() {
 	const cart = useSelector((state: RootState) => state.order.cart);
 
+	const totalOrder = cart.reduce((acc, order) => {
+		return acc + order.total * order.item.harga;
+	}, 0);
+
 	console.log({ cart });
 	return (
 		<Sheet>
@@ -44,7 +48,7 @@ export default function Cart() {
 						<div className="flex flex-col gap-y-4 w-full">
 							<div className="flex flex-row justify-between font-medium px-4 py-2 bg-white border border-gray-200 rounded-md">
 								<span>Total:</span>
-								<span>{formatCurrency(20000)}</span>
+								<span>{formatCurrency(totalOrder)}</span>
 							</div>
 							<SheetClose asChild>
 								<Button>Buat Pesanan</Button>

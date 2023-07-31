@@ -1,4 +1,9 @@
-import { addToCart, type OrderState } from "~/lib/resources/order/orderSlice";
+import {
+	type OrderState,
+	addToCart,
+	removeFromCart,
+	updateNoteByMenuID,
+} from "~/lib/resources/order/orderSlice";
 import { formatCurrency } from "~/lib/utils/currencyFormatter";
 import Button from "../atoms/button";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
@@ -34,7 +39,12 @@ export default function CartMenu({ data }: ComponentProps) {
 					</div>
 
 					<div className="flex flex-row justify-end gap-x-3 items-center">
-						<Button size="sm" variant="outline" className="w-8 h-8">
+						<Button
+							onClick={() => dispatch(removeFromCart(data.item))}
+							size="sm"
+							variant="outline"
+							className="w-8 h-8"
+						>
 							<MinusIcon className="w-4 h-4" />
 						</Button>
 						<span>{data.total}</span>
@@ -53,6 +63,15 @@ export default function CartMenu({ data }: ComponentProps) {
 				<label className="flex flex-col gap-y-1">
 					Catatan:
 					<Input
+						value={data.note}
+						onChange={(e) =>
+							dispatch(
+								updateNoteByMenuID({
+									id: data.item.id,
+									note: e.target.value,
+								})
+							)
+						}
 						name={`catatan ${data.item.nama}`}
 						placeholder="Tambahkan catatan disini..."
 					/>
